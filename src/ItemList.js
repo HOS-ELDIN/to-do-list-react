@@ -1,0 +1,32 @@
+import React from "react";
+import { FaTrashAlt } from "react-icons/fa";
+
+const ItemList = ({ items, handleCheck, handleDelete }) => {
+	return (
+		<ul>
+			{items.map((item) => (
+				<li className="item">
+					<input
+						type="checkbox"
+						onChange={() => handleCheck(item.id)}
+						checked={item.checked}
+					/>
+
+					<label
+						onDoubleClick={() => handleCheck(item.id)}
+						style={item.checked ? { color: "gray" } : null}
+					>
+						{item.item}
+					</label>
+					<FaTrashAlt
+						onClick={() => handleDelete(item.id)}
+						role="button"
+						tabIndex={0}
+					/>
+				</li>
+			))}
+		</ul>
+	);
+};
+
+export default ItemList;

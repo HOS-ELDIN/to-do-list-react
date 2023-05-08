@@ -1,41 +1,16 @@
 import React from "react";
-import logo from "./logo.svg";
-import { useState } from "react";
+// import logo from "./logo.svg";
+// import { useState } from "react";
+import ItemList from "./ItemList";
 
-const Content = () => {
-	//this is use state the first value is the state var and the other is the method to change it
-	//the value world is the default value for the var name
-	const [name, setNewName] = useState("world");
-
-	const handleNamehange = () => {
-		const names = ["hossam", "hos", "hoshos"];
-		const ranNo = Math.floor(Math.random() * 3);
-		//here we used the method to change the var name to another value
-		setNewName(names[ranNo]);
-	};
-
-	const handleClick = () => {
-		console.log("clicked");
-	};
-
-	// const handleClick2 = (name) => {
-	// 	console.log(`${name} was clicked`);
-	// };
-
-	// const handleClick3 = (e) => {
-	// 	console.log(e.target.innerText);
-	// };
+const Content = ({ items, handleCheck, handleDelete }) => {
 	return (
 		<main>
-			<img src={logo} className="App-logo" alt="na" />
-
-			<p onDoubleClick={handleClick}>hello {name}!</p>
-
-			<button onClick={handleNamehange}>Change Name</button>
-
-			{/* <button onClick={() => handleClick2("h")}>Click me2</button> */}
-
-			{/* <button onClick={(e) => handleClick3(e)}>Click me3</button> */}
+			{items.length ? (
+				<ItemList items={items} handleCheck ={handleCheck} handleDelete ={handleDelete} />
+			) : (
+				<p>Your list is empty</p>
+			)}
 		</main>
 	);
 };

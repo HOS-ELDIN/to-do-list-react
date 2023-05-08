@@ -29,6 +29,15 @@ code {
 		animation: App-logo-spin infinite 20s linear;
 	}
 }
+header h1 {
+	margin: 0;
+	padding-block: 5px;
+	text-transform: capitalize;
+}
+
+main {
+	flex-grow: 1;
+}
 
 main p {
 	color: orangered;
@@ -61,4 +70,47 @@ button:active {
 	to {
 		transform: rotate(360deg);
 	}
+}
+
+ul {
+	list-style: none;
+	padding: 0;
+	text-align: left;
+}
+
+ul .item {
+	padding: 10px;
+	display: flex;
+	gap: 5px;
+	background-color: #eee;
+	margin-bottom: 5px;
+	align-items: center;
+}
+ul .item label {
+	flex: 1;
+}
+
+ul .item label,
+ul .item input {
+	cursor: pointer;
+	user-select: none;
+}
+
+.item input[type="checkbox"]:focus + label {
+	text-decoration: underline;
+}
+.item input[type="checkbox"]:checked + label {
+	text-decoration: line-through;
+}
+
+ul .item svg {
+	color: steelblue;
+	cursor: pointer;
+	width: 20px;
+	height: 20px;
+}
+ul .item svg:focus,
+ul .item svg:hover {
+	color: red;
+	outline: none;
 }
