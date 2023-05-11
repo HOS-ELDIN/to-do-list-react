@@ -76,6 +76,7 @@ ul {
 	list-style: none;
 	padding: 0;
 	text-align: left;
+	margin: 0;
 }
 
 ul .item {
@@ -114,3 +115,41 @@ ul .item svg:hover {
 	color: red;
 	outline: none;
 }
+
+form {
+	display: flex;
+	padding: 5px;
+	align-items: center;
+	margin-block: 5px;
+}
+
+form label {
+	display: none;
+}
+
+form input {
+	flex-grow: 1;
+	margin-right: 5px;
+	padding: 8px;
+	border-radius: 10px;
+	outline: none;
+	border: 2px solid orangered;
+}
+
+form button {
+	border-radius: 10px;
+	height: 35px;
+	aspect-ratio: 1;
+	border: 2px solid orangered;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: orangered;
+	}
+
+	form button:focus,
+	form button:hover {
+		border-color: limegreen;
+		color: white;
+		background-color: limegreen;
+	}
