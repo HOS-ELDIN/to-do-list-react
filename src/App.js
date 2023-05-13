@@ -2,17 +2,24 @@ import Header from "./Header";
 import Content from "./Content";
 import Footer from "./Footer";
 // import Content1 from "./Content-copy";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AddItem from "./AddItem";
 import SearchItem from "./SearchItem";
 
 function App() {
+	// use stat section
 	const [items, setNewItems] = useState(
 		JSON.parse(localStorage.getItem("list"))
 	);
 	const [newItem, setNewItem] = useState("");
 	const [searchInput, setSearchInput] = useState("");
 
+	// use effect section
+	useEffect(() => {
+		console.log("effect worked");
+	});
+
+	// functions and handelers section
 	const setAndSaveItems = (listItems) => {
 		setNewItems(listItems);
 		localStorage.setItem("list", JSON.stringify(listItems));

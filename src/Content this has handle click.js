@@ -25,7 +25,6 @@ const Content = () => {
 			<p onDoubleClick={handleClick}>hello {name}!</p>
 
 			<button onClick={handleNamehange}>Change Name</button>
-
 		</main>
 	);
 };
