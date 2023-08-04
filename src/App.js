@@ -5,44 +5,103 @@ import Footer from "./Footer";
 import { useState, useEffect } from "react";
 import AddItem from "./AddItem";
 import SearchItem from "./SearchItem";
+import apiRequest from "./apiRequest";
 
 function App() {
+	// api const
+	const API_URL = "http://localhost:3500/items";
+
 	// use stat section
-	const [items, setNewItems] = useState(
-		JSON.parse(localStorage.getItem("list"))
-	);
+	const [items, setItems] = useState([]);
 	const [newItem, setNewItem] = useState("");
 	const [searchInput, setSearchInput] = useState("");
+	const [fetchError, setFetchError] = useState(null);
+	const [isLoading, setIsLoading] = useState(true);
 
 	// use effect section
+
+	// useEffect hook is used to know if the component is rendered (mounted) or (unmounted) and also can be used to detect any change or specific changes (it is like feed back in sequential control)
 	useEffect(() => {
-		console.log("effect worked");
-	});
+		const fetchItems = async () => {
+			try {
+				const response = await fetch(API_URL);
+				if (!response.ok) throw Error("did not recive data");
+
+				const listItems = await response.json();
+				setItems(listItems);
+
+				setFetchError(null);
+			} catch (error) {
+				setFetchError(error.message);
+			} finally {
+				setIsLoading(false);
+			}
+		};
+
+		setTimeout(() => {
+			fetchItems();
+		}, 2000);
+	}, []);
 
 	// functions and handelers section
-	const setAndSaveItems = (listItems) => {
-		setNewItems(listItems);
-		localStorage.setItem("list", JSON.stringify(listItems));
-	};
 
-	const addItem = (item) => {
+	const addItem = async (item) => {
 		const id = items.length ? items[items.length - 1].id + 1 : 1;
 		const myNewItem = { id, checked: false, item };
 		const listItems = [...items, myNewItem];
-		setAndSaveItems(listItems);
-		console.log(listItems);
+		setItems(listItems);
+
+		const postOption = {
+			method: "POST",
+			headers: {
+				"content-type": "application/json",
+			},
+			body: JSON.stringify(myNewItem),
+		};
+
+		const result = await apiRequest(API_URL, postOption);
+
+		if (result) setFetchError(result);
 	};
 
-	const handleCheck = (id) => {
+	const handleCheck = async (id) => {
 		const listItems = items.map((item) =>
 			item.id === id ? { ...item, checked: !item.checked } : item
 		);
-		setAndSaveItems(listItems);
+		setItems(listItems);
+
+		const updatedItem = listItems.filter((item) => item.id === id);
+
+		const updateOptions = {
+			method: "PATCH",
+			headers: {
+				"content-type": "application/json",
+			},
+			body: JSON.stringify({ checked: updatedItem[0].checked }),
+		};
+
+		const updateApiUrl = `${API_URL}/${id}`;
+
+		const result = await apiRequest(updateApiUrl, updateOptions);
+
+		if (result) setFetchError(result);
 	};
 
-	const handleDelete = (id) => {
+	const handleDelete = async (id) => {
 		const listItems = items.filter((item) => item.id !== id);
-		setAndSaveItems(listItems);
+		setItems(listItems);
+
+		// const deletedItem = items.filter((item) => item.id === id);
+
+		const deleteOptions = {
+			method: "DELETE",
+		};
+
+		const deleteApiUrl = `${API_URL}/${id}`
+
+		const result = await apiRequest(deleteApiUrl,deleteOptions)
+		console.log(result);
+		if (result) setFetchError(result)
 	};
 
 	const handleSubmit = (e) => {
@@ -64,14 +123,21 @@ function App() {
 
 			<SearchItem searchInput={searchInput} setSearchInput={setSearchInput} />
 
-			<Content
-				items={items.filter((item) =>
-					item.item.toLowerCase().includes(searchInput.toLowerCase())
+			<main>
+				{isLoading && <p>Loading Items...</p>}
+				{fetchError && <p style={{ color: "red" }}>{`error: ${fetchError}`}</p>}
+
+				{!fetchError && !isLoading && (
+					<Content
+						items={items.filter((item) =>
+							item.item.toLowerCase().includes(searchInput.toLowerCase())
+						)}
+						handleCheck={handleCheck}
+						handleDelete={handleDelete}
+					/>
 				)}
-				handleCheck={handleCheck}
-				handleDelete={handleDelete}
-			/>
-			{/* <Content1 /> */}
+			</main>
+
 			<Footer length={items.length} />
 		</div>
 	);
